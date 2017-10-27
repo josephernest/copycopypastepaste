@@ -2,6 +2,7 @@
 
 #include "windows.bi"
 #include "win\shellapi.bi"
+#include "crt.bi"
 
 #define sAppName "copycopypastepaste"
 
@@ -19,7 +20,7 @@ dim shared as HGLOBAL pCurObj , pOldObj
 dim shared as ULONG uCurFmt , uOldFmt
 dim shared as hwnd uCurWnd , uOldWnd
 dim shared as HMENU hContext
-dim shared as integer iIgnoreClipboard
+dim shared as integer iIgnoreClipboard,iIgnoreTray
 dim shared as integer iVkPasteEx
 
 sub FatalError( pzMessage as zstring ptr )
@@ -165,6 +166,15 @@ end function
 
 sub InitProgram() constructor
 
+  #define cvi3(_SS) (cvi(_SS " ")-&h20000000)
+  dim as zstring ptr pzCmd = GetCommandLine()  
+  for N as integer = 0 to strlen(pzCmd)-3
+    select case *cptr(ulong ptr,pzCmd+N)
+    case cvi(" -n "), cvi(" -N "), cvi3(" -n"), cvi3(" -N")      
+      iIgnoreTray = 1
+    end select
+  next N
+
   dim as WNDCLASS tWndClass
   AppInstance = GetModuleHandle(null)
   hTrayIcon = LoadIcon(AppInstance,MAKEINTRESOURCE(1))    
@@ -194,21 +204,23 @@ sub InitProgram() constructor
     !"Is there already a instance of the program running?" )
   end if
   
-  hContext = CreatePopupMenu()
-  var MF_STATE = MF_STRING or (iif(GetStartupState(),MF_CHECKED,MF_UNCHECKED))
-  AppendMenu( hContext , MF_STATE , miStart , "&Start with Windows" )
-  AppendMenu( hContext , MF_STRING , miQuit , "&Quit" )
-  
-  with tNotify
-    .cbSize = sizeof(NOTIFYICONDATA)
-    .hWnd = hMsgWnd
-    .uID = cast(ULONG,hMsgWnd)
-    .uFlags = NIF_ICON or NIF_MESSAGE
-    .hIcon = hTrayIcon
-    .uCallbackMessage = WM_APP+1
-  end with
-  
-  Shell_NotifyIcon( NIM_ADD , @tNotify )     
+  if iIgnoreTray=0 then  
+    hContext = CreatePopupMenu()
+    var MF_STATE = MF_STRING or (iif(GetStartupState(),MF_CHECKED,MF_UNCHECKED))
+    AppendMenu( hContext , MF_STATE , miStart , "&Start with Windows" )
+    AppendMenu( hContext , MF_STRING , miQuit , "&Quit" )
+    
+    with tNotify
+      .cbSize = sizeof(NOTIFYICONDATA)
+      .hWnd = hMsgWnd
+      .uID = cast(ULONG,hMsgWnd)
+      .uFlags = NIF_ICON or NIF_MESSAGE
+      .hIcon = hTrayIcon
+      .uCallbackMessage = WM_APP+1
+    end with
+    
+    Shell_NotifyIcon( NIM_ADD , @tNotify )     
+  end if
 
   hNextWnd = SetClipboardViewer( hMsgWnd )
   if hNextWnd=null andalso GetLastError=0  then
@@ -217,7 +229,8 @@ sub InitProgram() constructor
   
 end sub
 sub FinishProgram() destructor
-  if tNotify.hWnd then
+
+  if tNotify.hWnd andalso iIgnoreTray=0 then
     Shell_NotifyIcon( NIM_DELETE , @tNotify )
     tNotify.hWnd = null
   end if
