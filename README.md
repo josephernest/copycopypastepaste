@@ -12,7 +12,7 @@ Try this:
 
 * Do CTRL+V: as usual you'll get "yeah" pasted
 
-* **Do CTRL+<: you'll get the previous text in clipboard pasted, i.e. "yello"!**
+* **Do CTRL+<: you'll get the previous text in clipboard pasted, i.e. "hello"!**
 
 That's it, now you have 2 copy/paste buffers!
 
@@ -20,7 +20,7 @@ That's it, now you have 2 copy/paste buffers!
 Download the exe
 ----
 
-Here is [copycopypastepaste.exe](), the 23 KB portable executable.
+Here is [copycopypastepaste.exe](https://github.com/josephernest/copycopypastepaste/raw/master/copycopypastepaste.exe), the 23 KB portable executable.
 
 
 Why another clipboard manager?
