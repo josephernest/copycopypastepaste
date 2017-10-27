@@ -40,6 +40,8 @@ New features?
 
 This tool is intended to be minimalist and no new features would be added soon. As the code is very simple and MIT licensed, feel free to fork it and add new features.
 
+Tip: launching the app with `copycopypastepaste -n` starts it with no icon at all.
+
 About
 ----
 
