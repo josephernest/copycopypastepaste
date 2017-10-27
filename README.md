@@ -26,7 +26,7 @@ Here is [copycopypastepaste.exe](https://github.com/josephernest/copycopypastepa
 Why another clipboard manager?
 ----
 
-There are already lots of great clipboard managers. But when trying the open-source Ditto (15 MB package, 39 MB uncompressed, 179 MB source code package, oops!), I wanted to do a more minimalist tool that does just one single task.
+There are already lots of great clipboard managers. But when trying the open-source software Ditto (15 MB package, 39 MB uncompressed, 179 MB source code package, oops!), I wanted to do a more minimalist tool that does just one single task.
 
 
 How to compile
@@ -44,6 +44,7 @@ About
 ----
 
 Code: Mysoft64 (mysoft64bits@gmail.com)
+
 Idea / UX: Joseph Ernest ([@JosephErnest](https://twitter.com/JosephErnest))
 
 License
