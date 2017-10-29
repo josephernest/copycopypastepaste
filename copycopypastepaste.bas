@@ -7,7 +7,7 @@
 #define sAppName "copycopypastepaste"
 
 enum MenuID
-  miStart 
+  miStart = &h1000 
   miQuit
 end enum
 
